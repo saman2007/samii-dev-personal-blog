@@ -9,8 +9,7 @@
   --color-text-primary: var(--color-text-primary);
   --color-text-secondary: var(--color-text-secondary);
   --color-green: var(--color-green);
-  --font-inter: var(--font-inter);
-  --font-vazir: var(--font-vazir);
+  --font-main: var(--font-main)
 }
 
 :root {
@@ -30,16 +29,8 @@
   --color-border: #313131;
 }
 
-.fa {
-  @apply font-vazir;
-}
-
-.en {
-  @apply font-inter;
-}
-
 @layer base {
   body {
-    @apply bg-background font-inter;
+    @apply bg-background font-main;
   }
 }

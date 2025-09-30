@@ -1,28 +1,37 @@
 import { Inter, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { locales } from "@/data/locales";
+import { Params } from "@/types/types";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-main",
   weight: ["400", "500", "700", "900"],
   fallback: ["Roboto"],
 });
 
 const vazir = Vazirmatn({
   subsets: ["arabic"],
-  variable: "--font-vazir",
+  variable: "--font-main",
   weight: ["400", "500", "700", "900"],
   fallback: ["Roboto"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<Params>;
 }>) {
+  const { locale } = await params;
+
   return (
-    <html lang="en" className={cn(inter.variable, vazir.variable)}>
+    <html
+      lang={locale}
+      className={cn(locale === "fa" ? vazir.variable : inter.variable)}
+    >
       <body>{children}</body>
     </html>
   );
