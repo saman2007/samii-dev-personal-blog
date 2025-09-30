@@ -3,6 +3,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { locales } from "@/data/locales";
 import { Params } from "@/types/types";
+import NavigationBar from "@/components/NavigationBar/NavigationBar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,14 +26,18 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: Promise<Params>;
 }>) {
-  const { locale } = await params;
+  const extractedParams = await params;
+  const { locale } = extractedParams;
 
   return (
     <html
       lang={locale}
       className={cn(locale === "fa" ? vazir.variable : inter.variable)}
     >
-      <body>{children}</body>
+      <body>
+        <NavigationBar params={extractedParams} />
+        {children}
+      </body>
     </html>
   );
 }
