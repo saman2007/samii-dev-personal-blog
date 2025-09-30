@@ -4,14 +4,17 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-bg: var(--color-bg);
+  --color-*: initial;
+  --color-background: var(--color-background);
   --color-text-primary: var(--color-text-primary);
   --color-text-secondary: var(--color-text-secondary);
   --color-green: var(--color-green);
+  --font-inter: var(--font-inter);
+  --font-vazir: var(--font-vazir);
 }
 
 :root {
-  --color-bg: #F9FAFB;
+  --color-background: #F9FAFB;
   --color-text-primary: #111827;
   --color-text-secondary-color: #6B7280;
   --color-green: #22c55e;
@@ -20,9 +23,23 @@
 }
 
 .dark {
-  --color-bg: #000000;
+  --color-background: #000000;
   --color-text-primary: #FFFFFF;
   --color-text-secondary: #9CA3AF;
   --color-block-bg: #111111;
   --color-border: #313131;
+}
+
+.fa {
+  @apply font-vazir;
+}
+
+.en {
+  @apply font-inter;
+}
+
+@layer base {
+  body {
+    @apply bg-background font-inter;
+  }
 }
