@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/Link/Link";
 import { Button } from "@/components/ui/button";
 import TextLogo from "../TextLogo/TextLogo";
 import {

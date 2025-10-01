@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { NavigationItem } from "./NavigationBar";
-import Link from "next/link";
+import Link from "@/components/Link/Link";
 import { useParams } from "next/navigation";
 import { Params } from "@/types/types";
 import { getTranslations } from "@/lib/translation";
