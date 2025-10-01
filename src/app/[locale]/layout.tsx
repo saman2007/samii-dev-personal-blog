@@ -31,6 +31,7 @@ export default async function RootLayout({
 
   return (
     <html
+      dir={locale === "en" ? "ltr" : "rtl"}
       lang={locale}
       className={cn(locale === "fa" ? vazir.variable : inter.variable)}
     >
