@@ -39,6 +39,6 @@
 
 @layer base {
   body {
-    @apply bg-background font-main;
+    @apply bg-background font-main text-text-primary text-base;
   }
 }
