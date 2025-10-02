@@ -7,11 +7,11 @@ import { ArrowRight } from "lucide-react";
 import Markdown from "react-markdown";
 
 export interface HeroSectionProps {
-  params: Promise<Params>;
+  params: Params;
 }
 
 const HeroSection = async ({ params }: HeroSectionProps) => {
-  const { t } = getTranslations(["home"], await params);
+  const { t } = getTranslations(["home"], params);
 
   return (
     <section className="relative flex items-center justify-center px-4 py-16 md:py-24">
