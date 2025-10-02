@@ -7,7 +7,7 @@ export interface SomeArticleCategoriesProps {
 }
 
 const SomeArticleCategories = ({ params }: SomeArticleCategoriesProps) => {
-  const { t } = getTranslations(["common", "home"], params);
+  const { t } = getTranslations(["home"], params);
 
   // Mock data for articles
   const newestArticles = [
