@@ -1,9 +1,9 @@
 import { Inter, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { locales } from "@/data/locales";
 import { Params } from "@/types/types";
 import NavigationBar from "@/components/NavigationBar/NavigationBar";
+import Footer from "@/components/Footer/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -38,6 +38,7 @@ export default async function RootLayout({
       <body>
         <NavigationBar params={extractedParams} />
         {children}
+        <Footer params={extractedParams} />
       </body>
     </html>
   );

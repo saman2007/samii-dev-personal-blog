@@ -13,6 +13,7 @@ import DesktopNavigationItems from "./DesktopNavigationItems";
 import ThemeSwitcher from "./ActionItems/ThemeSwitcher";
 import SearchButton from "./ActionItems/SearchButton";
 import MobileNavigationBar from "./MobileNavigationBar";
+import SwitchLang from "./ActionItems/SwitchLang";
 
 export interface NavigationItem {
   href: string;
@@ -45,6 +46,7 @@ const NavigationBar = ({ params }: NavigationBarProps) => {
         <div className="flex items-center gap-2">
           <SearchButton />
           <ThemeSwitcher />
+          <SwitchLang />
           <Button size="default" asChild className="ml-2 hidden md:flex">
             <Link href="/signin">{t("common.account")}</Link>
           </Button>
