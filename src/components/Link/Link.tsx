@@ -16,12 +16,31 @@ export interface LinkProps
 const Link = ({ href, children, replaceLang, ...other }: LinkProps) => {
   const { locale } = useParams();
 
-  const newHref = `${
-    isValidUrl(href as string) ? "" : replaceLang || locale
-  }${href}`;
+  let localizedHref: typeof href;
+
+  if (typeof href === "string") {
+    if (isValidUrl(href)) {
+      // external link → don’t touch
+      localizedHref = href;
+    } else {
+      // internal path → add locale
+      localizedHref = `/${replaceLang || locale}${
+        href.startsWith("/") ? href : `/${href}`
+      }`;
+    }
+  } else {
+    // Object form
+    const path = href.pathname ?? "";
+    localizedHref = {
+      ...href,
+      pathname: path.startsWith("/")
+        ? `/${replaceLang || locale}${path}`
+        : `/${replaceLang || locale}/${path}`,
+    };
+  }
 
   return (
-    <NextLink href={newHref} {...other}>
+    <NextLink href={localizedHref} {...other}>
       {children}
     </NextLink>
   );
