@@ -27,7 +27,6 @@ const Footer = ({ params }: FooterProps) => {
       text: t("common.money_support"),
       rel: "noopener noreferrer",
       target: "_blank",
-      replaceLang: "none",
     },
     { href: CONTACT_ME_ROUTE, text: t("common.contact_me") },
   ];

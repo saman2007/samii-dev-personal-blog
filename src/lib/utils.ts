@@ -16,3 +16,12 @@ export const getPreferredLocale = (
 
   return (negotiator.language(locales) as (typeof locales)[number]) || "en";
 };
+
+export const isValidUrl = (text: string): boolean => {
+  try {
+    new URL(text);
+    return true;
+  } catch {
+    return false;
+  }
+};
