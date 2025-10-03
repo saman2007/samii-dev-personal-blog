@@ -18,3 +18,5 @@ export type LocalesTranslations = {
 };
 
 export type Themes = ["light", "dark"];
+
+export type DateArg = Date | string | number;

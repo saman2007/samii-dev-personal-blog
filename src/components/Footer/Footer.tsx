@@ -8,6 +8,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Params } from "@/types/types";
 import { getTranslations } from "@/lib/translation";
+import { getDateParts } from "@/lib/time";
 
 interface FooterLink extends Omit<LinkProps, "children"> {
   text: string;
@@ -54,7 +55,8 @@ const Footer = ({ params }: FooterProps) => {
             {t("common.created_by_love")}
           </p>
           <p className="text-xs text-text-secondary">
-            © {new Date().getFullYear()} {t("common.all_rights_reserved")}
+            © {getDateParts(new Date(), params.locale).year}{" "}
+            {t("common.all_rights_reserved")}
           </p>
         </div>
       </div>
