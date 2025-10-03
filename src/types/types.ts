@@ -16,3 +16,5 @@ export interface Params {
 export type LocalesTranslations = {
   [key in (typeof locales)[number]]: Translations;
 };
+
+export type Themes = ["light", "dark"];

@@ -8,7 +8,7 @@ import {
   NEWEST_ARTICLES_ROUTE,
 } from "@/data/staticRoutes";
 import { getTranslations } from "@/lib/translation";
-import { Params } from "@/types/types";
+import { Params, Themes } from "@/types/types";
 import DesktopNavigationItems from "./DesktopNavigationItems";
 import ThemeSwitcher from "./ActionItems/ThemeSwitcher";
 import SearchButton from "./ActionItems/SearchButton";
@@ -22,9 +22,10 @@ export interface NavigationItem {
 
 interface NavigationBarProps {
   params: Params;
+  defaultTheme: string | undefined;
 }
 
-const NavigationBar = ({ params }: NavigationBarProps) => {
+const NavigationBar = ({ params, defaultTheme }: NavigationBarProps) => {
   const { t } = getTranslations(["common"], params);
 
   const navItems: NavigationItem[] = [
@@ -45,7 +46,7 @@ const NavigationBar = ({ params }: NavigationBarProps) => {
 
         <div className="flex items-center gap-2">
           <SearchButton />
-          <ThemeSwitcher />
+          <ThemeSwitcher defaultTheme={defaultTheme} />
           <SwitchLang />
           <Button size="default" asChild className="ml-2 hidden md:flex">
             <Link href="/signin">{t("common.account")}</Link>

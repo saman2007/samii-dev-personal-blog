@@ -20,7 +20,6 @@ const ArticleCard = ({
   slug,
   coverImage,
 }: ArticleCardProps) => {
-  console.log(coverImage);
   return (
     <Link href={`/articles/${slug}`} className="group block">
       <div className="overflow-hidden rounded-lg border border-border bg-block transition-all hover:shadow-lg hover:border-green/50 h-full flex flex-col">

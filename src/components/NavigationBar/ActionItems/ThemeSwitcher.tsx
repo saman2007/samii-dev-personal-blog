@@ -1,19 +1,45 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Themes } from "@/types/types";
 import { Moon, Sun } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
-const ThemeSwitcher = () => {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+export interface ThemeSwitcher {
+  defaultTheme: string | undefined;
+}
+
+const ThemeSwitcher = ({ defaultTheme }: ThemeSwitcher) => {
+  const [theme, setTheme] = useState<Themes[number]>(
+    defaultTheme === "dark" ? "dark" : "light"
+  );
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
 
     setTheme(newTheme);
 
+    Cookies.set("theme", newTheme);
+
     document.documentElement.classList.toggle("dark");
   };
+
+  useEffect(() => {
+    if (!defaultTheme) {
+      const isUserThemeDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+      if (isUserThemeDark) {
+        document.documentElement.classList.add("dark");
+        setTheme("dark");
+      }
+    }
+  }, []);
+
+  // Fir ensuring that the `theme` state changes if there was an unexpected change in `defaultTheme` prop
+  useEffect(() => {
+    if (defaultTheme) setTheme(defaultTheme === "dark" ? "dark" : "light");
+  }, [defaultTheme]);
 
   return (
     <Button

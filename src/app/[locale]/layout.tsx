@@ -1,9 +1,10 @@
 import { Inter, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Params } from "@/types/types";
+import { Params, Themes } from "@/types/types";
 import NavigationBar from "@/components/NavigationBar/NavigationBar";
 import Footer from "@/components/Footer/Footer";
+import { cookies } from "next/headers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,15 +29,22 @@ export default async function RootLayout({
 }>) {
   const extractedParams = await params;
   const { locale } = extractedParams;
+  const selectedTheme = (await cookies()).get("theme");
 
   return (
     <html
       dir={locale === "en" ? "ltr" : "rtl"}
       lang={locale}
-      className={cn(locale === "fa" ? vazir.variable : inter.variable)}
+      className={cn(
+        locale === "fa" ? vazir.variable : inter.variable,
+        selectedTheme?.value === "dark" && "dark"
+      )}
     >
       <body>
-        <NavigationBar params={extractedParams} />
+        <NavigationBar
+          params={extractedParams}
+          defaultTheme={selectedTheme?.value}
+        />
         {children}
         <Footer params={extractedParams} />
       </body>
