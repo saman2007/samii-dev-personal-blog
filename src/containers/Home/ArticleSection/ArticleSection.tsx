@@ -9,7 +9,7 @@ import { getTranslations } from "@/lib/translation";
 
 export interface ArticleSectionProps {
   title: string;
-  articles: ArticleCardProps[];
+  articles: Omit<ArticleCardProps, "locale">[];
   params: Params;
 }
 
@@ -33,7 +33,11 @@ const ArticleSection = ({ title, articles, params }: ArticleSectionProps) => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {articles.map((article) => (
-            <ArticleCard key={article.slug} {...article} />
+            <ArticleCard
+              key={article.slug}
+              {...article}
+              locale={params.locale}
+            />
           ))}
         </div>
       </div>

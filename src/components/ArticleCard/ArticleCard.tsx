@@ -2,6 +2,7 @@ import Link from "@/components/Link/Link";
 import { Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import { LocalesType } from "@/data/locales";
 
 export interface ArticleCardProps {
   title: string;
@@ -10,6 +11,7 @@ export interface ArticleCardProps {
   tags: string[];
   slug: string;
   coverImage: string;
+  locale: LocalesType[number];
 }
 
 const ArticleCard = ({
@@ -19,6 +21,7 @@ const ArticleCard = ({
   tags,
   slug,
   coverImage,
+  locale,
 }: ArticleCardProps) => {
   return (
     <Link href={`/articles/${slug}`} className="group block">
@@ -51,12 +54,18 @@ const ArticleCard = ({
 
           <div className="flex items-center gap-2 text-sm text-text-secondary mt-auto">
             <Calendar className="h-4 w-4" />
-            <time dateTime={date}>
-              {new Date(date).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
+            <time dateTime={date} className="rtl:h-4">
+              {locale === "fa"
+                ? new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  }).format(new Date(date))
+                : new Date(date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
             </time>
           </div>
         </div>

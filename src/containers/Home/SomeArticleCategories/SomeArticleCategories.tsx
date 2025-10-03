@@ -14,7 +14,7 @@ const SomeArticleCategories = ({ params }: SomeArticleCategoriesProps) => {
     {
       title: t("home.a1_title"),
       description: t("home.a1_description"),
-      date: "2024-01-15",
+      date: "2025-10-3",
       tags: [t("home.a1_tags_1"), t("home.a1_tags_2"), t("home.a1_tags_3")],
       slug: "getting-started-nextjs-15",
       coverImage: "/nextjs-development-coding.jpg",
