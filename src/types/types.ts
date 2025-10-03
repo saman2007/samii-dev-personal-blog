@@ -1,4 +1,4 @@
-import { locales } from "@/data/locales";
+import { LocalesType } from "@/data/locales";
 
 export interface Translation {
   [key: string]: string;
@@ -9,12 +9,12 @@ export interface Translations {
 }
 
 export interface Params {
-  locale: (typeof locales)[number];
+  locale: LocalesType[number];
   [key: string]: string | undefined;
 }
 
 export type LocalesTranslations = {
-  [key in (typeof locales)[number]]: Translations;
+  [key in LocalesType[number]]: Translations;
 };
 
 export type Themes = ["light", "dark"];

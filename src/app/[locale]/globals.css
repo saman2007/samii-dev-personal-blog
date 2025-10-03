@@ -14,7 +14,8 @@
   --color-border: var(--color-border);
   --color-semi-white: var(--color-semi-white);
   --color-black: var(--color-black);
-  --font-main: var(--font-main);
+  --font-vazir: var(--font-vazir);
+  --font-inter: var(--font-inter);
 }
 
 :root {
@@ -39,6 +40,6 @@
 
 @layer base {
   body {
-    @apply bg-background font-main text-text-primary text-base;
+    @apply bg-background text-text-primary text-base;
   }
 }

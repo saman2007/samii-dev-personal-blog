@@ -1,6 +1,6 @@
 "use client";
 
-import { localesType } from "@/data/locales";
+import { LocalesType } from "@/data/locales";
 import { isValidUrl } from "@/lib/utils";
 import NextLink, { LinkProps as NextLinkProps } from "next/link";
 import { useParams } from "next/navigation";
@@ -9,7 +9,7 @@ import React from "react";
 export interface LinkProps
   extends Omit<React.ComponentProps<"a">, "href">,
     NextLinkProps {
-  replaceLang?: localesType[number];
+  replaceLang?: LocalesType[number];
   children: React.ReactNode;
 }
 

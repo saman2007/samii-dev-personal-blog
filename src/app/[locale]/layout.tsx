@@ -1,21 +1,21 @@
 import { Inter, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Params, Themes } from "@/types/types";
+import { Params } from "@/types/types";
 import NavigationBar from "@/components/NavigationBar/NavigationBar";
 import Footer from "@/components/Footer/Footer";
 import { cookies } from "next/headers";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-main",
+  variable: "--font-inter",
   weight: ["400", "500", "700", "900"],
   fallback: ["Roboto"],
 });
 
 const vazir = Vazirmatn({
   subsets: ["arabic"],
-  variable: "--font-main",
+  variable: "--font-vazir",
   weight: ["400", "500", "700", "900"],
   fallback: ["Roboto"],
 });
@@ -36,8 +36,10 @@ export default async function RootLayout({
       dir={locale === "en" ? "ltr" : "rtl"}
       lang={locale}
       className={cn(
-        locale === "fa" ? vazir.variable : inter.variable,
-        selectedTheme?.value === "dark" && "dark"
+        vazir.variable,
+        inter.variable,
+        selectedTheme?.value === "dark" && "dark",
+        locale === "fa" ? vazir.className : inter.className
       )}
     >
       <body>

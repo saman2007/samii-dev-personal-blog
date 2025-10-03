@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { langKeys, locales, localesType } from "@/data/locales";
+import { locales, localesInfo } from "@/data/locales";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { Params } from "@/types/types";
 import { Button } from "@/components/ui/button";
@@ -27,27 +27,27 @@ const SwitchLang = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {Object.keys(langKeys).map((langKey) => {
-          const typedLangKey = langKey as localesType[number];
-
+        {locales.map((localeKey) => {
           return (
             <DropdownMenuItem
               asChild
-              className="cursor-pointer"
-              key={typedLangKey}
+              className="cursor-pointer transition-colors"
+              key={localeKey}
             >
               <Link
                 href={
                   path.replace(new RegExp(`(${locales.join("|")})`), "") +
                   searchParams.toString()
                 }
-                replaceLang={typedLangKey}
+                replaceLang={localeKey}
                 className={cn(
-                  locale === typedLangKey ? "bg-green text-semi-white" : "",
-                  "w-full"
+                  locale === localeKey ? "bg-green text-semi-white" : "",
+                  "w-full",
+                  localesInfo[localeKey].font
                 )}
+                dir={localesInfo[localeKey].dir}
               >
-                {langKeys[typedLangKey]}
+                {localesInfo[localeKey].label}
               </Link>
             </DropdownMenuItem>
           );
