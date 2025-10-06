@@ -17,7 +17,7 @@ export const getTranslations = (
   const t = (translateKey: string): string => {
     const [file, key] = translateKey.split(".") as [string, string];
 
-    return specifiedLocaleFiles[file][key] || translateKey;
+    return specifiedLocaleFiles[file][key] || key;
   };
 
   return { t };

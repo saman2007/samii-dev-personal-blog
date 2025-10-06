@@ -10,6 +10,7 @@ import Link from "@/components/Link/Link";
 import { useParams } from "next/navigation";
 import { Params } from "@/types/types";
 import { getTranslations } from "@/lib/translation";
+import { SIGN_IN_ROUTE, SIGN_UP_ROUTE } from "@/data/staticRoutes";
 
 export interface MobileNavigationProps {
   items: NavigationItem[];
@@ -53,22 +54,41 @@ const MobileNavigationBar = ({ items }: MobileNavigationProps) => {
               </Link>
             ))}
           </div>
-          <Button
-            size="sm"
-            asChild
-            className="w-full animate-in slide-in-from-right-[100px]"
-            style={{
-              transition: `transform ${
-                200 * (items.length + 1) + "ms"
-              }, background 200ms`,
-              // @ts-expect-error This is because tailwind uses this kind of pattern and tw-animate-css uses it, and I want to declare it inside `styles`
-              "--tw-duration": 200 * (items.length + 1) + "ms",
-            }}
-          >
-            <Link href="/signin" onClick={() => setIsOpen(false)}>
-              {t("common.account")}
-            </Link>
-          </Button>
+          <div className="flex flex-col gap-y-2.5">
+            <Button
+              size="sm"
+              asChild
+              className="w-full animate-in slide-in-from-right-[100px]"
+              style={{
+                transition: `transform ${
+                  200 * (items.length + 1) + "ms"
+                }, background 200ms`,
+                // @ts-expect-error This is because tailwind uses this kind of pattern and tw-animate-css uses it, and I want to declare it inside `styles`
+                "--tw-duration": 200 * (items.length + 1) + "ms",
+              }}
+            >
+              <Link href={SIGN_UP_ROUTE} onClick={() => setIsOpen(false)}>
+                {t("common.sign_up")}
+              </Link>
+            </Button>
+            <Button
+              size="sm"
+              asChild
+              variant="outline"
+              className="w-full animate-in slide-in-from-right-[100px]"
+              style={{
+                transition: `transform ${
+                  200 * (items.length + 1) + "ms"
+                }, background 200ms`,
+                // @ts-expect-error This is because tailwind uses this kind of pattern and tw-animate-css uses it, and I want to declare it inside `styles`
+                "--tw-duration": 200 * (items.length + 2) + "ms",
+              }}
+            >
+              <Link href={SIGN_IN_ROUTE} onClick={() => setIsOpen(false)}>
+                {t("common.sign_in")}
+              </Link>
+            </Button>
+          </div>
         </div>
       </SheetContent>
     </Sheet>

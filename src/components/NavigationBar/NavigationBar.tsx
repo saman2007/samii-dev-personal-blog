@@ -5,10 +5,11 @@ import {
   ARTICLES_ROUTE,
   CONTACT_ME_ROUTE,
   HOME_ROUTE,
-  NEWEST_ARTICLES_ROUTE,
+  SIGN_IN_ROUTE,
+  SIGN_UP_ROUTE,
 } from "@/data/staticRoutes";
 import { getTranslations } from "@/lib/translation";
-import { Params, Themes } from "@/types/types";
+import { Params } from "@/types/types";
 import DesktopNavigationItems from "./DesktopNavigationItems";
 import ThemeSwitcher from "./ActionItems/ThemeSwitcher";
 import SearchButton from "./ActionItems/SearchButton";
@@ -30,7 +31,6 @@ const NavigationBar = ({ params, defaultTheme }: NavigationBarProps) => {
 
   const navItems: NavigationItem[] = [
     { href: HOME_ROUTE, text: t("common.home") },
-    { href: NEWEST_ARTICLES_ROUTE, text: t("common.newest_articles") },
     { href: ARTICLES_ROUTE, text: t("common.articles") },
     { href: CONTACT_ME_ROUTE, text: t("common.contact_me") },
   ];
@@ -48,9 +48,14 @@ const NavigationBar = ({ params, defaultTheme }: NavigationBarProps) => {
           <SearchButton />
           <ThemeSwitcher defaultTheme={defaultTheme} />
           <SwitchLang />
-          <Button size="default" asChild className="ml-2 hidden md:flex">
-            <Link href="/signin">{t("common.account")}</Link>
-          </Button>
+          <div className="gap-x-1 hidden md:flex">
+            <Button size="default" variant="outline" asChild className="ml-2">
+              <Link href={SIGN_IN_ROUTE}>{t("common.sign_in")}</Link>
+            </Button>
+            <Button size="default" asChild className="ml-2 hidden md:flex">
+              <Link href={SIGN_UP_ROUTE}>{t("common.sign_up")}</Link>
+            </Button>
+          </div>
 
           <MobileNavigationBar items={navItems} />
         </div>
