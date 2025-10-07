@@ -7,7 +7,7 @@ export interface AuthContainerProps {
 
 const AuthContainer = ({ children, bgImg }: AuthContainerProps) => {
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full max-w-xl md:max-w-4xl mx-auto">
       <div className="relative grid grid-cols-1 overflow-hidden border rounded-lg shadow-xl md:grid-cols-2 bg-block border-border min-h-72">
         <div className="relative hidden h-full md:block">
           <Image

@@ -1,7 +1,7 @@
 "use client";
 
 import { Menu } from "lucide-react";
-import { Button } from "@/components/UI/Button/button";
+import { Button } from "@/components/UI/Button/Button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/UI/Sheet/Sheet";
 import { cn } from "@/lib/utils";
 import { useState } from "react";

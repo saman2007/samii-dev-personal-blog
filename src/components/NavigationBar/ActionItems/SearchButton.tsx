@@ -1,4 +1,4 @@
-import { Button } from "@/components/UI/Button/button";
+import { Button } from "@/components/UI/Button/Button";
 import { Search } from "lucide-react";
 
 const SearchButton = () => {

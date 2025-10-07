@@ -1,5 +1,5 @@
 import Link from "@/components/Link/Link";
-import { Button } from "@/components/UI/Button/button";
+import { Button } from "@/components/UI/Button/Button";
 import { ARTICLES_ROUTE, CONTACT_ME_ROUTE } from "@/data/staticRoutes";
 import { getTranslations } from "@/lib/translation";
 import { Params } from "@/types/types";

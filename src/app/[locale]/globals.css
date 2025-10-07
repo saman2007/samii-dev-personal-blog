@@ -14,6 +14,7 @@
   --color-border: var(--color-border);
   --color-semi-white: var(--color-semi-white);
   --color-black: var(--color-black);
+  --color-red: var(--color-red);
   --font-vazir: var(--font-vazir);
   --font-inter: var(--font-inter);
 }
@@ -28,6 +29,7 @@
   --color-block: #F3F4F6;
   --color-border: #e7e7e7;
   --color-black: #000000;
+  --color-red: #c90000;
 }
 
 .dark {

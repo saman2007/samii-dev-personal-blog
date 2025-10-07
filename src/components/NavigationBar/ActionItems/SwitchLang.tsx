@@ -10,7 +10,7 @@ import {
 import { locales, localesInfo } from "@/data/locales";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { Params } from "@/types/types";
-import { Button } from "@/components/UI/Button/button";
+import { Button } from "@/components/UI/Button/Button";
 import Link from "@/components/Link/Link";
 import { cn } from "@/lib/utils";
 
