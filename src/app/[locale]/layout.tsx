@@ -20,13 +20,13 @@ const vazir = Vazirmatn({
   fallback: ["Roboto"],
 });
 
-export default async function RootLayout({
+const RootLayout = async ({
   children,
   params,
 }: Readonly<{
   children: React.ReactNode;
   params: Promise<Params>;
-}>) {
+}>) => {
   const extractedParams = await params;
   const { locale } = extractedParams;
   const selectedTheme = (await cookies()).get("theme");
@@ -52,4 +52,6 @@ export default async function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
