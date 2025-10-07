@@ -1,5 +1,5 @@
 import Link from "@/components/Link/Link";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/UI/Button/button";
 import TextLogo from "../TextLogo/TextLogo";
 import {
   ARTICLES_ROUTE,
