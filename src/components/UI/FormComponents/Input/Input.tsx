@@ -5,6 +5,9 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { useFormContext, useFormState } from "react-hook-form";
 import FieldError from "../FieldError/FieldError";
+import { getTranslations } from "@/lib/translation";
+import { useParams } from "next/navigation";
+import { Params, YupErrorMessage } from "@/types/types";
 
 const InputUI = ({
   className,
@@ -32,7 +35,11 @@ const InputRHF = ({
 }: React.ComponentProps<"input"> & { name: string }) => {
   const { register } = useFormContext();
   const { errors } = useFormState({ name });
-  const error = errors[name]?.message;
+
+  const params = useParams<Params>();
+  const { t } = getTranslations(["yupErrors"], params);
+
+  const error = errors[name]?.message as YupErrorMessage | string | undefined;
 
   return (
     <>
@@ -44,7 +51,13 @@ const InputRHF = ({
           onChange: props?.onChange,
         })}
       />
-      <FieldError error={error?.toString()} />
+      <FieldError
+        error={
+          typeof error === "object"
+            ? t(`yupErrors.${error.key}`, error.data)
+            : error
+        }
+      />
     </>
   );
 };

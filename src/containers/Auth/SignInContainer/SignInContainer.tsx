@@ -5,12 +5,12 @@ import AuthContainer from "../AuthContainer/AuthContainer";
 import bgImg from "@/assets/images/sign-in-img.avif";
 import { getTranslations } from "@/lib/translation";
 import { FormProvider, useForm } from "react-hook-form";
-import { InputRHF, InputUI } from "@/components/UI/FormComponents/Input/Input";
+import { InputRHF } from "@/components/UI/FormComponents/Input/Input";
 import { FieldLabel } from "@/components/UI/FormComponents/FieldLabel/FieldLabel";
 import Link from "@/components/Link/Link";
 import { FORGOT_PASSWORD_ROUTE, SIGN_UP_ROUTE } from "@/data/staticRoutes";
 import { Button } from "@/components/UI/Button/Button";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { SigninData, signinSchema } from "@/lib/validationSchemas";
 
 export interface SignInContainerProps {
@@ -18,7 +18,7 @@ export interface SignInContainerProps {
 }
 
 const SignInContainer = ({ params }: SignInContainerProps) => {
-  const methods = useForm({ resolver: zodResolver(signinSchema) });
+  const methods = useForm({ resolver: yupResolver(signinSchema) });
 
   const { t } = getTranslations(["common", "auth"], params);
 

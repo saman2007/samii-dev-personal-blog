@@ -1,8 +1,8 @@
-import z from "zod";
+import { yup } from "./yup";
 
-export const signinSchema = z.object({
-  email: z.email().nonoptional(),
-  password: z.string().min(1),
+export const signinSchema = yup.object({
+  email: yup.string().email().required(),
+  password: yup.string().required(),
 });
 
-export type SigninData = z.infer<typeof signinSchema>;
+export type SigninData = yup.InferType<typeof signinSchema>;
