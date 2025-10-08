@@ -31,16 +31,14 @@ const SignInContainer = ({ params }: SignInContainerProps) => {
       <div className="w-full h-full">
         <div className="mb-10">
           <h1 className="text-2xl font-bold text-text-primary">
-            Sign in to your account
+            {t("auth.sign_in_title")}
           </h1>
-          <p className="mt-2 text-text-secondary">
-            Welcome back! Please enter your details.
-          </p>
+          <p className="mt-2 text-text-secondary">{t("auth.sign_in_desc")}</p>
         </div>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
             <div className="mb-2">
-              <FieldLabel className="mb-2">Email</FieldLabel>
+              <FieldLabel className="mb-2">{t("common.email")}</FieldLabel>
               <InputRHF
                 name="email"
                 type="email"
@@ -48,16 +46,16 @@ const SignInContainer = ({ params }: SignInContainerProps) => {
               />
             </div>
             <div className="mb-2">
-              <FieldLabel className="mb-2">Password</FieldLabel>
+              <FieldLabel className="mb-2">{t("common.password")}</FieldLabel>
               <InputRHF
                 name="password"
                 type="password"
-                placeholder="Your password"
+                placeholder="●●●●●●●●"
               />
             </div>
             <div className="flex justify-end mb-5">
               <Link href={FORGOT_PASSWORD_ROUTE} className="text-green text-sm">
-                Forgot password?
+                {t("auth.forgot_pass")}
               </Link>
             </div>
             <Button
@@ -65,14 +63,14 @@ const SignInContainer = ({ params }: SignInContainerProps) => {
               size="lg"
               className="text-base w-full mb-6"
             >
-              Sign In
+              {t("common.sign_in")}
             </Button>
           </form>
         </FormProvider>
         <p className="text-center text-sm">
-          Don't have an account?{" "}
+          {t("auth.dont_have_account")}{" "}
           <Link href={SIGN_UP_ROUTE} className="text-center text-green">
-            Sign up
+            {t("common.sign_up")}
           </Link>
         </p>
       </div>

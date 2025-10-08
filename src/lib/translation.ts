@@ -16,7 +16,7 @@ export const getTranslations = (
   //`translateKey` must be in this format: `<translation_file>.<key_in_translation_file>`
   const t = (
     translateKey: string,
-    translateData: Record<string, number | string> | undefined
+    translateData?: Record<string, number | string>
   ): string => {
     const [file, key] = translateKey.split(".") as [string, string];
 
