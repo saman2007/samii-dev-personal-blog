@@ -10,5 +10,7 @@
   "sign_in": "ورود",
   "sign_up": "ثبت نام",
   "email": "ایمیل",
-  "password": "رمز عبور"
+  "password": "رمز عبور",
+  "repeat_password": "تکرار رمز عبور",
+  "username": "نام کاربری"
 }

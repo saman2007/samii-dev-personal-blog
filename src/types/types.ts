@@ -17,5 +17,5 @@ export type DateArg = Date | string | number;
 
 export interface YupErrorMessage {
   key: string;
-  data: Record<string, number | string>;
+  data: Record<string, number | string> | undefined;
 }

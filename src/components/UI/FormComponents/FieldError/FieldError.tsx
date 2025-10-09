@@ -3,7 +3,7 @@ export interface FieldErrorProps {
 }
 
 const FieldError = ({ error }: FieldErrorProps) => {
-  return <p className="text-red mt-0.5 text-sm h-5">{error}</p>;
+  return <p className="text-red mt-0.5 text-sm min-h-5">{error}</p>;
 };
 
 export default FieldError;
