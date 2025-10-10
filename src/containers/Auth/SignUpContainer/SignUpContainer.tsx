@@ -31,9 +31,9 @@ const SignUpContainer = ({ params }: SignUpContainerProps) => {
       <div className="w-full h-full">
         <div className="mb-10">
           <h1 className="text-2xl font-bold text-text-primary">
-            {t("auth.sign_in_title")}
+            {t("auth.sign_up_title")}
           </h1>
-          <p className="mt-2 text-text-secondary">{t("auth.sign_in_desc")}</p>
+          <p className="mt-2 text-text-secondary">{t("auth.sign_up_desc")}</p>
         </div>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)}>
