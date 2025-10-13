@@ -8,11 +8,14 @@ export const withValidatedBody =
   ) =>
   async (req: NextRequest, ctx: AnyRouteContext): Promise<Response> => {
     if (req.headers.get("Content-Type") !== "application/json") {
-      return Response.json({
-        error: "Invalid 'Content-Type' header. It must be 'application/json'",
-        code: 400,
-        data: null,
-      });
+      return Response.json(
+        {
+          error: "Invalid 'Content-Type' header. It must be 'application/json'",
+          code: 400,
+          data: null,
+        },
+        { status: 400 }
+      );
     }
 
     const body: object = await req.json();
@@ -21,9 +24,12 @@ export const withValidatedBody =
 
     if (!validationData.errors.length) return apiRoute(req, ctx, body as T);
     else
-      return Response.json({
-        data: null,
-        code: 400,
-        error: validationData.errors,
-      });
+      return Response.json(
+        {
+          data: null,
+          code: 400,
+          error: validationData.errors,
+        },
+        { status: 400 }
+      );
   };

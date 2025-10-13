@@ -76,19 +76,26 @@ export const POST = withUnexpectedError(
       })
       .returning();
 
-    const jwtPayload: JwtPayload = {
-      id: createdUser.id,
-    };
+    const currentDate = Date.now();
 
-    const refreshToken = createRefreshToken(jwtPayload);
-    const accessToken = createAccessToken(jwtPayload);
+    const refreshToken = createRefreshToken({
+      sub: createdUser.id,
+      jti: crypto.randomUUID(),
+      exp: currentDate + REFRESH_TOKEN_AGE_SECONDS * 1000,
+    });
+
+    const accessToken = createAccessToken({
+      sub: createdUser.id,
+      jti: crypto.randomUUID(),
+      exp: currentDate + ACCESS_TOKEN_AGE_SECONDS * 1000,
+    });
 
     const ua = new UAParser(req.headers.get("User-Agent") ?? undefined);
 
     await db.insert(usersTokenModel).values({
       userId: createdUser.id,
       hashedRefreshToken: hashToken(refreshToken),
-      expiresAt: new Date(Date.now() + REFRESH_TOKEN_AGE_SECONDS * 1000),
+      expiresAt: new Date(currentDate + REFRESH_TOKEN_AGE_SECONDS * 1000),
       deviceName: ua.getDevice().toString() || null,
       isRevoked: false,
       userAgent: ua.getUA(),
