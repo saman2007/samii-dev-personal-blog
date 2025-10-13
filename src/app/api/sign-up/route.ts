@@ -6,9 +6,17 @@ import { SignupAPIBody, signupAPIBodySchema } from "@/lib/apiValidationSchema";
 import { eq } from "drizzle-orm";
 import { ValidationError } from "yup";
 import bcrypt from "bcrypt";
-import { createAccessToken, createRefreshToken, JwtPayload } from "@/lib/jwt";
+import {
+  ACCESS_TOKEN_AGE_SECONDS,
+  createAccessToken,
+  createRefreshToken,
+  hashToken,
+  JwtPayload,
+  REFRESH_TOKEN_AGE_SECONDS,
+} from "@/lib/jwt";
 import { usersTokenModel } from "@/db/models/UserTokens";
 import { cookies } from "next/headers";
+import { UAParser } from "ua-parser-js";
 
 const validationHandler = (body: object) => {
   try {
@@ -69,26 +77,37 @@ export const POST = withUnexpectedError(
       .returning();
 
     const jwtPayload: JwtPayload = {
-      role: "USER",
-      email,
-      username,
       id: createdUser.id,
     };
 
     const refreshToken = createRefreshToken(jwtPayload);
     const accessToken = createAccessToken(jwtPayload);
 
-    await db
-      .insert(usersTokenModel)
-      .values({ userId: createdUser.id, refreshToken: refreshToken });
+    const ua = new UAParser(req.headers.get("User-Agent") ?? undefined);
+
+    await db.insert(usersTokenModel).values({
+      userId: createdUser.id,
+      hashedRefreshToken: hashToken(refreshToken),
+      expiresAt: new Date(Date.now() + REFRESH_TOKEN_AGE_SECONDS * 1000),
+      deviceName: ua.getDevice().toString() || null,
+      isRevoked: false,
+      userAgent: ua.getUA(),
+      ip:
+        req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+        req.headers.get("x-real-ip") ??
+        null,
+    });
 
     const c = await cookies();
 
     c.set("refresh_token", refreshToken, {
-      maxAge: 60 * 60 * 24 * 14,
+      maxAge: REFRESH_TOKEN_AGE_SECONDS,
       httpOnly: true,
     });
-    c.set("access_token", accessToken, { maxAge: 60 * 60, httpOnly: true });
+    c.set("access_token", accessToken, {
+      maxAge: ACCESS_TOKEN_AGE_SECONDS,
+      httpOnly: true,
+    });
 
     return Response.json({ error: null, code: 200, data: createdUser });
   }, validationHandler)
