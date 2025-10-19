@@ -28,5 +28,5 @@ export type AnyRouteContext = { params: Promise<Record<string, string>> };
 export type ApiRouteFunction<T extends object | undefined = undefined> = (
   request: NextRequest,
   ctx: AnyRouteContext,
-  body?: T
+  body: T
 ) => Promise<Response>;

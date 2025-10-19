@@ -20,11 +20,11 @@ export interface JwtPayload {
 }
 
 export const createRefreshToken = (payload: JwtPayload): string => {
-  return jwt.sign(payload, REFRESH_SECRET, { expiresIn: "14d" });
+  return jwt.sign(payload, REFRESH_SECRET);
 };
 
 export const createAccessToken = (payload: JwtPayload): string => {
-  return jwt.sign(payload, ACCESS_SECRET, { expiresIn: "1h" });
+  return jwt.sign(payload, ACCESS_SECRET);
 };
 
 export const validateRefreshToken = (refreshToken: string): JwtPayload => {

@@ -11,12 +11,12 @@ import {
   createAccessToken,
   createRefreshToken,
   hashToken,
-  JwtPayload,
   REFRESH_TOKEN_AGE_SECONDS,
 } from "@/lib/jwt";
 import { usersTokenModel } from "@/db/models/UserTokens";
 import { cookies } from "next/headers";
 import { UAParser } from "ua-parser-js";
+import crypto from "crypto";
 
 const validationHandler = (body: object) => {
   try {
@@ -96,7 +96,10 @@ export const POST = withUnexpectedError(
       userId: createdUser.id,
       hashedRefreshToken: hashToken(refreshToken),
       expiresAt: new Date(currentDate + REFRESH_TOKEN_AGE_SECONDS * 1000),
-      deviceName: ua.getDevice().toString() || null,
+      deviceName:
+        ua.getDevice().toString() === "undefined"
+          ? null
+          : ua.getDevice().toString(),
       isRevoked: false,
       userAgent: ua.getUA(),
       ip:

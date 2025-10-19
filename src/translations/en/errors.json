@@ -1,1 +1,7 @@
-{ "1": "", "2": "", "3": "" }
+{
+  "1": "A user with the entered email and username already exists.",
+  "2": "A user with the entered email already exists.",
+  "3": "A user with entered username already exists.",
+  "4": "Email or password are incorrect.",
+  "5": "Your password is incorrect."
+}
