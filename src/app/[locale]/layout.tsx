@@ -1,10 +1,13 @@
 import { Inter, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Params } from "@/types/types";
+import { Params, Themes } from "@/types/types";
 import NavigationBar from "@/components/NavigationBar/NavigationBar";
 import Footer from "@/components/Footer/Footer";
 import { cookies } from "next/headers";
+import { Toaster } from "@/components/UI/Sonner/Sonner";
+import StoreProvider from "@/contexts/storeContext";
+import AxiosInterceptor from "@/providers/AxiosInterceptor";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -29,7 +32,9 @@ const RootLayout = async ({
 }>) => {
   const extractedParams = await params;
   const { locale } = extractedParams;
-  const selectedTheme = (await cookies()).get("theme");
+  const selectedThemeCookie = (await cookies()).get("theme");
+  const selectedTheme: Themes[number] =
+    selectedThemeCookie?.value === "dark" ? "dark" : "light";
 
   return (
     <html
@@ -38,17 +43,22 @@ const RootLayout = async ({
       className={cn(
         vazir.variable,
         inter.variable,
-        selectedTheme?.value === "dark" && "dark",
+        selectedTheme === "dark" && "dark",
         locale === "fa" ? vazir.className : inter.className
       )}
     >
       <body>
-        <NavigationBar
-          params={extractedParams}
-          defaultTheme={selectedTheme?.value}
-        />
-        {children}
-        <Footer params={extractedParams} />
+        <AxiosInterceptor>
+          <StoreProvider defaultStoreData={{ theme: selectedTheme }}>
+            <NavigationBar
+              params={extractedParams}
+              defaultTheme={selectedTheme}
+            />
+            {children}
+            <Toaster />
+            <Footer params={extractedParams} />
+          </StoreProvider>
+        </AxiosInterceptor>
       </body>
     </html>
   );

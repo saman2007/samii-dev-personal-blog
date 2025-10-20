@@ -7,6 +7,8 @@ declare global {
       DATABASE_SUPPORT_SSL: string;
       REFRESH_SECRET: string;
       ACCESS_SECRET: string;
+      WEBSITE_URL?: string;
+      NEXT_PUBLIC_WEBSITE_URL?: string;
     }
   }
 }
