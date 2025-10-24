@@ -57,13 +57,10 @@ export const withPrivateAPI =
       .where(eq(usersTokenModel.hashedRefreshToken, hashToken(refreshToken)));
 
     if (isRevoked) {
-      return Response.json(
-        { data: null, error: "Unauthorized", code: 401 },
-        { status: 401 }
-      );
-    }
+      c.delete("refresh_token");
+      c.delete("access_token");
+      c.delete("is_logged_in");
 
-    if (refreshTokenExp <= new Date()) {
       return Response.json(
         { data: null, error: "Unauthorized", code: 401 },
         { status: 401 }
@@ -76,6 +73,17 @@ export const withPrivateAPI =
         jti: crypto.randomUUID(),
         exp: Date.now() + ACCESS_TOKEN_AGE_SECONDS * 1000,
       };
+
+      if (refreshTokenExp <= new Date()) {
+        c.delete("refresh_token");
+        c.delete("access_token");
+        c.delete("is_logged_in");
+
+        return Response.json(
+          { data: null, error: "Unauthorized", code: 401 },
+          { status: 401 }
+        );
+      }
 
       const newAccessToken = createAccessToken(jwtPayload);
 

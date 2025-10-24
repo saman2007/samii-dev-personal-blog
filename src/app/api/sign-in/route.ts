@@ -90,11 +90,11 @@ export const POST = withUnexpectedError(
         maxAge: REFRESH_TOKEN_AGE_SECONDS,
         httpOnly: true,
       });
-
       c.set("access_token", accessToken, {
         maxAge: ACCESS_TOKEN_AGE_SECONDS,
         httpOnly: true,
       });
+      c.set("is_logged_in", "1", { maxAge: ACCESS_TOKEN_AGE_SECONDS });
 
       const { password: __, ...resUser } = user;
 

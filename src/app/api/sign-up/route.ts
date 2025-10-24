@@ -118,6 +118,7 @@ export const POST = withUnexpectedError(
       maxAge: ACCESS_TOKEN_AGE_SECONDS,
       httpOnly: true,
     });
+    c.set("is_logged_in", "1", { maxAge: ACCESS_TOKEN_AGE_SECONDS });
 
     return Response.json({ error: null, code: 200, data: createdUser });
   }, validationHandler)
