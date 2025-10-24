@@ -16,14 +16,14 @@ import { usersTokenModel } from "@/db/models/UserTokens";
 
 export const withPrivateAPI =
   <T extends object>(
-    apiRoute: ApiRouteFunction<object | undefined>,
+    apiRoute: ApiRouteFunction<T>,
     adminMode = false,
     withUser = false
   ) =>
   async (
     req: NextRequest,
     ctx: AnyRouteContext,
-    data?: object
+    data: object = {}
   ): Promise<Response> => {
     const c = await cookies();
 
@@ -107,7 +107,7 @@ export const withPrivateAPI =
     }
 
     return apiRoute(req, ctx, {
-      ...(data || {}),
+      ...data,
       user: withUser ? user![0] : null,
     } as T);
   };

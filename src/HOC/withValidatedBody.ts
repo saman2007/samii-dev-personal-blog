@@ -9,7 +9,7 @@ export const withValidatedBody =
   async (
     req: NextRequest,
     ctx: AnyRouteContext,
-    data?: object
+    data: object = {}
   ): Promise<Response> => {
     if (req.headers.get("Content-Type") !== "application/json") {
       return Response.json(
@@ -27,7 +27,7 @@ export const withValidatedBody =
     const validationData = validationCallback(body);
 
     if (!validationData.errors.length)
-      return apiRoute(req, ctx, { ...(data || {}), body } as T);
+      return apiRoute(req, ctx, { ...data, body } as T);
     else
       return Response.json(
         {

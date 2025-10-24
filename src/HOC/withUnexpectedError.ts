@@ -2,11 +2,11 @@ import { AnyRouteContext, ApiRouteFunction } from "@/types/types";
 import { NextRequest } from "next/server";
 
 export const withUnexpectedError =
-  <T extends object>(apiRoute: ApiRouteFunction<object | undefined>) =>
+  <T extends object>(apiRoute: ApiRouteFunction<T>) =>
   async (
     req: NextRequest,
     ctx: AnyRouteContext,
-    data?: object
+    data: object = {}
   ): Promise<Response> => {
     try {
       const res = await apiRoute(req, ctx, data as T);
