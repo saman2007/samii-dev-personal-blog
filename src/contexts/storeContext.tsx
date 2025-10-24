@@ -1,10 +1,19 @@
 "use client";
 
+import { usersModel } from "@/db/models/UsersModel";
 import { Themes } from "@/types/types";
+import { InferSelectModel } from "drizzle-orm";
 import { createContext, useContext, useState } from "react";
 
+interface AuthInfo {
+  user: Omit<InferSelectModel<typeof usersModel>, "password"> | null;
+  isLoggedIn: boolean;
+  isLoading: boolean;
+}
+
 interface StoreData {
-  theme: Themes[number];
+  theme: Themes[number] | null;
+  auth: AuthInfo;
   [key: string]: any;
 }
 
@@ -14,7 +23,10 @@ interface StoreContext {
 }
 
 const storeContext = createContext<StoreContext>({
-  store: { theme: "dark" },
+  store: {
+    theme: "dark",
+    auth: { isLoggedIn: false, user: null, isLoading: false },
+  },
   setStore: (storeData) => {},
 });
 

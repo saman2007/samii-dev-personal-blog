@@ -30,74 +30,79 @@ const validationCallback = (body: Record<string, any>) => {
 };
 
 export const POST = withUnexpectedError(
-  withValidatedBody<SignInAPIBody>(async (req, _, { email, password }) => {
-    const [user] = await db
-      .select()
-      .from(usersModel)
-      .where(eq(usersModel.email, email))
-      .limit(1);
+  withValidatedBody<{ body: SignInAPIBody }>(
+    async (req, _, { body: { email, password } }) => {
+      const [user] = await db
+        .select()
+        .from(usersModel)
+        .where(eq(usersModel.email, email))
+        .limit(1);
 
-    if (!user) {
+      if (!user) {
+        return Response.json(
+          { code: 400, error: 4, data: null },
+          { status: 400 }
+        );
+      }
+
+      if (!compareSync(password, user.password)) {
+        return Response.json(
+          { code: 400, error: 5, data: null },
+          { status: 400 }
+        );
+      }
+
+      const c = await cookies();
+
+      const accessToken = createAccessToken({
+        exp: Date.now() + ACCESS_TOKEN_AGE_SECONDS * 1000,
+        jti: crypto.randomUUID(),
+        sub: user.id,
+      });
+
+      const refreshToken = createAccessToken({
+        exp: Date.now() + REFRESH_TOKEN_AGE_SECONDS * 1000,
+        jti: crypto.randomUUID(),
+        sub: user.id,
+      });
+
+      const currentDate = Date.now();
+
+      const ua = new UAParser(req.headers.get("User-Agent") ?? undefined);
+
+      await db.insert(usersTokenModel).values({
+        userId: user.id,
+        hashedRefreshToken: hashToken(refreshToken),
+        expiresAt: new Date(currentDate + REFRESH_TOKEN_AGE_SECONDS * 1000),
+        deviceName:
+          ua.getDevice().toString() === "undefined"
+            ? null
+            : ua.getDevice().toString(),
+        isRevoked: false,
+        userAgent: ua.getUA(),
+        ip:
+          req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+          req.headers.get("x-real-ip") ??
+          null,
+      });
+
+      c.set("refresh_token", refreshToken, {
+        maxAge: REFRESH_TOKEN_AGE_SECONDS,
+        httpOnly: true,
+      });
+
+      c.set("access_token", accessToken, {
+        maxAge: ACCESS_TOKEN_AGE_SECONDS,
+        httpOnly: true,
+      });
+
+      const { password: __, ...resUser } = user;
+
       return Response.json(
-        { code: 400, error: 4, data: null },
-        { status: 400 }
+        { data: resUser, error: null, code: 200 },
+        { status: 200 }
       );
-    }
-
-    if (!compareSync(password, user.password)) {
-      return Response.json(
-        { code: 400, error: 5, data: null },
-        { status: 400 }
-      );
-    }
-
-    const c = await cookies();
-
-    const accessToken = createAccessToken({
-      exp: Date.now() + ACCESS_TOKEN_AGE_SECONDS * 1000,
-      jti: crypto.randomUUID(),
-      sub: user.id,
-    });
-
-    const refreshToken = createAccessToken({
-      exp: Date.now() + REFRESH_TOKEN_AGE_SECONDS * 1000,
-      jti: crypto.randomUUID(),
-      sub: user.id,
-    });
-
-    const currentDate = Date.now();
-
-    const ua = new UAParser(req.headers.get("User-Agent") ?? undefined);
-
-    await db.insert(usersTokenModel).values({
-      userId: user.id,
-      hashedRefreshToken: hashToken(refreshToken),
-      expiresAt: new Date(currentDate + REFRESH_TOKEN_AGE_SECONDS * 1000),
-      deviceName:
-        ua.getDevice().toString() === "undefined"
-          ? null
-          : ua.getDevice().toString(),
-      isRevoked: false,
-      userAgent: ua.getUA(),
-      ip:
-        req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-        req.headers.get("x-real-ip") ??
-        null,
-    });
-
-    c.set("refresh_token", refreshToken, {
-      maxAge: REFRESH_TOKEN_AGE_SECONDS,
-      httpOnly: true,
-    });
-
-    c.set("access_token", accessToken, {
-      maxAge: ACCESS_TOKEN_AGE_SECONDS,
-      httpOnly: true,
-    });
-
-    return Response.json(
-      { data: user, error: null, code: 200 },
-      { status: 200 }
-    );
-  }, validationCallback)
+    },
+    validationCallback
+  )
 );

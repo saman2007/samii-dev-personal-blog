@@ -11,15 +11,19 @@ import {
 } from "@/lib/jwt";
 import { db } from "@/db/db";
 import { usersModel } from "@/db/models/UsersModel";
-import { eq } from "drizzle-orm";
+import { eq, InferSelectModel } from "drizzle-orm";
 import { usersTokenModel } from "@/db/models/UserTokens";
 
 export const withPrivateAPI =
-  (apiRoute: ApiRouteFunction<object | undefined>, adminMode = false) =>
+  <T extends object>(
+    apiRoute: ApiRouteFunction<object | undefined>,
+    adminMode = false,
+    withUser = false
+  ) =>
   async (
     req: NextRequest,
     ctx: AnyRouteContext,
-    body?: object
+    data?: object
   ): Promise<Response> => {
     const c = await cookies();
 
@@ -81,13 +85,20 @@ export const withPrivateAPI =
       });
     }
 
-    if (adminMode) {
-      const [{ usersRole }] = await db
-        .select({ usersRole: usersModel.role })
-        .from(usersModel)
-        .where(eq(usersModel.id, refreshTokenPayload.sub));
+    let user: InferSelectModel<typeof usersModel>[];
 
-      if (usersRole !== "ADMIN") {
+    if (adminMode || withUser) {
+      user = await db
+        .select()
+        .from(usersModel)
+        .where(eq(usersModel.id, refreshTokenPayload.sub))
+        .limit(1);
+    }
+
+    if (adminMode) {
+      const [{ role }] = user!;
+
+      if (role !== "ADMIN") {
         return Response.json(
           { data: null, error: "Access Denied", code: 403 },
           { status: 403 }
@@ -95,5 +106,8 @@ export const withPrivateAPI =
       }
     }
 
-    return apiRoute(req, ctx, body);
+    return apiRoute(req, ctx, {
+      ...(data || {}),
+      user: withUser ? user![0] : null,
+    } as T);
   };

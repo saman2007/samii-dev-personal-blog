@@ -23,7 +23,7 @@ export interface NavigationItem {
 
 interface NavigationBarProps {
   params: Params;
-  defaultTheme: string | undefined;
+  defaultTheme: string | null;
 }
 
 const NavigationBar = ({ params, defaultTheme }: NavigationBarProps) => {

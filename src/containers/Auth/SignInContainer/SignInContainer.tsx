@@ -12,6 +12,12 @@ import { FORGOT_PASSWORD_ROUTE, SIGN_UP_ROUTE } from "@/data/staticRoutes";
 import { Button } from "@/components/UI/Button/Button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SigninData, signinSchema } from "@/lib/validationSchemas";
+import { useRequest } from "@/hooks/useRequest";
+import { signInAPI } from "@/api/auth";
+import { toast } from "sonner";
+import { Spinner } from "@/components/UI/Spinner/Spinner";
+import { useParams, useRouter } from "next/navigation";
+import { useSetStore } from "@/contexts/storeContext";
 
 export interface SignInContainerProps {
   params: Params;
@@ -19,11 +25,21 @@ export interface SignInContainerProps {
 
 const SignInContainer = ({ params }: SignInContainerProps) => {
   const methods = useForm({ resolver: yupResolver(signinSchema) });
+  const { execute: signIn, isLoading } = useRequest(signInAPI);
+  const { replace } = useRouter();
+  const { locale } = useParams<Params>();
+  const setStore = useSetStore();
 
   const { t } = getTranslations(["common", "auth"], params);
 
-  const onSubmit = (data: SigninData) => {
-    console.log(data);
+  const onSubmit = async (data: SigninData) => {
+    const userData = await signIn(data);
+
+    toast.success(t("auth.signed_in_success"));
+
+    setStore({ auth: { isLoggedIn: true, user: userData, isLoading: false } });
+
+    replace(`/${locale}/`);
   };
 
   return (
@@ -62,8 +78,9 @@ const SignInContainer = ({ params }: SignInContainerProps) => {
               variant="default"
               size="lg"
               className="text-base w-full mb-6"
+              disabled={isLoading}
             >
-              {t("common.sign_in")}
+              {isLoading ? <Spinner className="size-6" /> : t("common.sign_in")}
             </Button>
           </form>
         </FormProvider>

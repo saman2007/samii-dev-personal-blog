@@ -31,7 +31,7 @@ const validationHandler = (body: object) => {
 };
 
 export const POST = withUnexpectedError(
-  withValidatedBody<SignupAPIBody>(async (req, _, body) => {
+  withValidatedBody<{ body: SignupAPIBody }>(async (req, _, { body }) => {
     const { email, password, username } = body!;
 
     const userByUsername = db

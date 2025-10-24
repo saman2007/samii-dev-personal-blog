@@ -1,14 +1,13 @@
 "use client";
 
 import { Button } from "@/components/UI/Button/Button";
-import { Themes } from "@/types/types";
 import { Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { useSetStore, useStoreData } from "@/contexts/storeContext";
 
 export interface ThemeSwitcher {
-  defaultTheme: string | undefined;
+  defaultTheme: string | null;
 }
 
 const ThemeSwitcher = ({ defaultTheme }: ThemeSwitcher) => {

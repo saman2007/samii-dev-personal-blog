@@ -32,9 +32,14 @@ const RootLayout = async ({
 }>) => {
   const extractedParams = await params;
   const { locale } = extractedParams;
-  const selectedThemeCookie = (await cookies()).get("theme");
-  const selectedTheme: Themes[number] =
-    selectedThemeCookie?.value === "dark" ? "dark" : "light";
+  const c = await cookies();
+  const selectedThemeCookie = c.get("theme");
+  const selectedTheme: Themes[number] | null = selectedThemeCookie?.value
+    ? selectedThemeCookie?.value === "dark"
+      ? "dark"
+      : "light"
+    : null;
+  const hasAuthCred = c.has("refresh__token") && c.has("access_token");
 
   return (
     <html
@@ -49,7 +54,16 @@ const RootLayout = async ({
     >
       <body>
         <AxiosInterceptor>
-          <StoreProvider defaultStoreData={{ theme: selectedTheme }}>
+          <StoreProvider
+            defaultStoreData={{
+              theme: selectedTheme,
+              auth: {
+                user: null,
+                isLoggedIn: hasAuthCred,
+                isLoading: hasAuthCred,
+              },
+            }}
+          >
             <NavigationBar
               params={extractedParams}
               defaultTheme={selectedTheme}
