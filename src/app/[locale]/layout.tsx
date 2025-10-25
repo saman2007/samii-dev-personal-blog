@@ -8,6 +8,7 @@ import { cookies } from "next/headers";
 import { Toaster } from "@/components/UI/Sonner/Sonner";
 import StoreProvider from "@/contexts/storeContext";
 import AxiosInterceptor from "@/providers/AxiosInterceptor";
+import AuthProvider from "@/providers/AuthProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -64,13 +65,15 @@ const RootLayout = async ({
               },
             }}
           >
-            <NavigationBar
-              params={extractedParams}
-              defaultTheme={selectedTheme}
-            />
-            {children}
-            <Toaster />
-            <Footer params={extractedParams} />
+            <AuthProvider>
+              <NavigationBar
+                params={extractedParams}
+                defaultTheme={selectedTheme}
+              />
+              {children}
+              <Toaster />
+              <Footer params={extractedParams} />
+            </AuthProvider>
           </StoreProvider>
         </AxiosInterceptor>
       </body>

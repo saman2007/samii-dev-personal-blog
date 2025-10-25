@@ -33,11 +33,13 @@ const SignInContainer = ({ params }: SignInContainerProps) => {
   const { t } = getTranslations(["common", "auth"], params);
 
   const onSubmit = async (data: SigninData) => {
-    const userData = await signIn(data);
+    const signInRes = await signIn(data);
 
     toast.success(t("auth.signed_in_success"));
 
-    setStore({ auth: { isLoggedIn: true, user: userData, isLoading: false } });
+    setStore({
+      auth: { isLoggedIn: true, user: signInRes.data, isLoading: false },
+    });
 
     replace(`/${locale}/`);
   };

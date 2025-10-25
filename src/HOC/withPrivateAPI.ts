@@ -71,7 +71,7 @@ export const withPrivateAPI =
       const jwtPayload: JwtPayload = {
         sub: accessTokenPayload.sub,
         jti: crypto.randomUUID(),
-        exp: Date.now() + ACCESS_TOKEN_AGE_SECONDS * 1000,
+        exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_AGE_SECONDS,
       };
 
       if (refreshTokenExp <= new Date()) {

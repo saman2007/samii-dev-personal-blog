@@ -10,6 +10,7 @@ import { cookies } from "next/headers";
 import {
   ACCESS_TOKEN_AGE_SECONDS,
   createAccessToken,
+  createRefreshToken,
   hashToken,
   REFRESH_TOKEN_AGE_SECONDS,
 } from "@/lib/jwt";
@@ -53,20 +54,19 @@ export const POST = withUnexpectedError(
       }
 
       const c = await cookies();
+      const currentDate = Date.now();
 
       const accessToken = createAccessToken({
-        exp: Date.now() + ACCESS_TOKEN_AGE_SECONDS * 1000,
+        exp: Math.floor(currentDate / 1000) + ACCESS_TOKEN_AGE_SECONDS,
         jti: crypto.randomUUID(),
         sub: user.id,
       });
 
-      const refreshToken = createAccessToken({
-        exp: Date.now() + REFRESH_TOKEN_AGE_SECONDS * 1000,
+      const refreshToken = createRefreshToken({
+        exp: Math.floor(currentDate / 1000) + REFRESH_TOKEN_AGE_SECONDS,
         jti: crypto.randomUUID(),
         sub: user.id,
       });
-
-      const currentDate = Date.now();
 
       const ua = new UAParser(req.headers.get("User-Agent") ?? undefined);
 
@@ -94,7 +94,7 @@ export const POST = withUnexpectedError(
         maxAge: ACCESS_TOKEN_AGE_SECONDS,
         httpOnly: true,
       });
-      c.set("is_logged_in", "1", { maxAge: ACCESS_TOKEN_AGE_SECONDS });
+      c.set("is_logged_in", "1", { maxAge: REFRESH_TOKEN_AGE_SECONDS });
 
       const { password: __, ...resUser } = user;
 

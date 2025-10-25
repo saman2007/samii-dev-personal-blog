@@ -1,4 +1,6 @@
 import { LocalesType } from "@/data/locales";
+import { usersModel } from "@/db/models/UsersModel";
+import { InferSelectModel } from "drizzle-orm";
 import { NextRequest } from "next/server";
 
 export type Translation = Record<string, string>;
@@ -30,3 +32,14 @@ export type ApiRouteFunction<T extends object | undefined = undefined> = (
   ctx: AnyRouteContext,
   data: T
 ) => Promise<Response>;
+
+export type UserPrivateInfo = Omit<
+  InferSelectModel<typeof usersModel>,
+  "password"
+>;
+
+export interface APIResponse<T> {
+  data: T;
+  error: string;
+  code: number;
+}

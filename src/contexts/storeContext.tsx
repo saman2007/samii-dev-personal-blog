@@ -1,12 +1,10 @@
 "use client";
 
-import { usersModel } from "@/db/models/UsersModel";
-import { Themes } from "@/types/types";
-import { InferSelectModel } from "drizzle-orm";
+import { Themes, UserPrivateInfo } from "@/types/types";
 import { createContext, useContext, useState } from "react";
 
 interface AuthInfo {
-  user: Omit<InferSelectModel<typeof usersModel>, "password"> | null;
+  user: UserPrivateInfo | null;
   isLoggedIn: boolean;
   isLoading: boolean;
 }
