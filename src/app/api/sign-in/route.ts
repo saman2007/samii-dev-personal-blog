@@ -56,21 +56,24 @@ export const POST = withUnexpectedError(
       const c = await cookies();
       const currentDate = Date.now();
 
+      const authId = crypto.randomUUID();
+
       const accessToken = createAccessToken({
         exp: Math.floor(currentDate / 1000) + ACCESS_TOKEN_AGE_SECONDS,
-        jti: crypto.randomUUID(),
+        jti: authId,
         sub: user.id,
       });
 
       const refreshToken = createRefreshToken({
         exp: Math.floor(currentDate / 1000) + REFRESH_TOKEN_AGE_SECONDS,
-        jti: crypto.randomUUID(),
+        jti: authId,
         sub: user.id,
       });
 
       const ua = new UAParser(req.headers.get("User-Agent") ?? undefined);
 
       await db.insert(usersTokenModel).values({
+        id: authId,
         userId: user.id,
         hashedRefreshToken: hashToken(refreshToken),
         expiresAt: new Date(currentDate + REFRESH_TOKEN_AGE_SECONDS * 1000),

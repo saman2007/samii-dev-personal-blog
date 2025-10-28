@@ -4,7 +4,6 @@ import { NextRequest } from "next/server";
 import {
   ACCESS_TOKEN_AGE_SECONDS,
   createAccessToken,
-  hashToken,
   JwtPayload,
   validateAccessToken,
   validateRefreshToken,
@@ -69,7 +68,7 @@ export const withPrivateAPI =
         refreshTokenExp: usersTokenModel.expiresAt,
       })
       .from(usersTokenModel)
-      .where(eq(usersTokenModel.hashedRefreshToken, hashToken(refreshToken)));
+      .where(eq(usersTokenModel.id, refreshTokenPayload.jti));
 
     if (userAuth.length === 0) return unauthorizedErr();
 
