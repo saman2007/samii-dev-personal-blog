@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "@/components/Link/Link";
 import { Button } from "@/components/UI/Button/Button";
 import TextLogo from "../TextLogo/TextLogo";
@@ -15,6 +17,9 @@ import ThemeSwitcher from "./ActionItems/ThemeSwitcher";
 import SearchButton from "./ActionItems/SearchButton";
 import MobileNavigationBar from "./MobileNavigationBar";
 import SwitchLang from "./ActionItems/SwitchLang";
+import { useParams } from "next/navigation";
+import { useStoreData } from "@/contexts/storeContext";
+import AvatarItem from "./AvatarItem/AvatarItem";
 
 export interface NavigationItem {
   href: string;
@@ -22,11 +27,15 @@ export interface NavigationItem {
 }
 
 interface NavigationBarProps {
-  params: Params;
   defaultTheme: string | null;
 }
 
-const NavigationBar = ({ params, defaultTheme }: NavigationBarProps) => {
+const NavigationBar = ({ defaultTheme }: NavigationBarProps) => {
+  const params = useParams<Params>();
+  const {
+    auth: { isLoggedIn, isLoading, user },
+  } = useStoreData();
+
   const { t } = getTranslations(["common"], params);
 
   const navItems: NavigationItem[] = [
@@ -49,12 +58,23 @@ const NavigationBar = ({ params, defaultTheme }: NavigationBarProps) => {
           <ThemeSwitcher defaultTheme={defaultTheme} />
           <SwitchLang />
           <div className="gap-x-1 hidden md:flex">
-            <Button size="default" variant="outline" asChild className="ml-2">
-              <Link href={SIGN_IN_ROUTE}>{t("common.sign_in")}</Link>
-            </Button>
-            <Button size="default" asChild className="ml-2 hidden md:flex">
-              <Link href={SIGN_UP_ROUTE}>{t("common.sign_up")}</Link>
-            </Button>
+            {isLoading || isLoggedIn ? (
+              <AvatarItem isLoading={isLoading} avatarImg={user?.profileImg} />
+            ) : (
+              <>
+                <Button
+                  size="default"
+                  variant="outline"
+                  asChild
+                  className="ml-2 w-[5.3rem]"
+                >
+                  <Link href={SIGN_IN_ROUTE}>{t("common.sign_in")}</Link>
+                </Button>
+                <Button size="default" asChild className="ml-2 w-[5.3rem]">
+                  <Link href={SIGN_UP_ROUTE}>{t("common.sign_up")}</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           <MobileNavigationBar items={navItems} />

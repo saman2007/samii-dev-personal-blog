@@ -17,9 +17,19 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (isLoggedIn) {
       setStore({ auth: { user: null, isLoading: true, isLoggedIn: true } });
 
-      getUserPrivateInfo().then(({ data }) => {
-        setStore({ auth: { isLoading: false, isLoggedIn: true, user: data } });
-      });
+      getUserPrivateInfo()
+        .then(({ data }) => {
+          setStore({
+            auth: { isLoading: false, isLoggedIn: true, user: data.data },
+          });
+        })
+        .catch((reason) => {
+          if (reason.response.status === 401) {
+            setStore({
+              auth: { isLoading: false, isLoggedIn: false, user: null },
+            });
+          }
+        });
     }
   }, []);
 

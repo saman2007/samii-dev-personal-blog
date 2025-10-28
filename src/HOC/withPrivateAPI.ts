@@ -27,14 +27,23 @@ export const withPrivateAPI =
   ): Promise<Response> => {
     const c = await cookies();
 
+    const removeUselessCookies = () => {
+      c.delete("refresh_token");
+      c.delete("access_token");
+      c.delete("is_logged_in");
+    };
+
     const refreshToken = c.get("refresh_token")?.value;
     const accessToken = c.get("access_token")?.value;
 
-    if (!refreshToken || !accessToken)
+    if (!refreshToken || !accessToken) {
+      removeUselessCookies();
+
       return Response.json(
         { data: null, error: "Unauthorized", code: 401 },
         { status: 401 }
       );
+    }
 
     let refreshTokenPayload: JwtPayload;
     let accessTokenPayload: JwtPayload;
@@ -42,6 +51,8 @@ export const withPrivateAPI =
       refreshTokenPayload = validateRefreshToken(refreshToken);
       accessTokenPayload = validateAccessToken(accessToken);
     } catch {
+      removeUselessCookies();
+
       return Response.json(
         { data: null, error: "Unauthorized", code: 401 },
         { status: 401 }
@@ -57,9 +68,7 @@ export const withPrivateAPI =
       .where(eq(usersTokenModel.hashedRefreshToken, hashToken(refreshToken)));
 
     if (isRevoked) {
-      c.delete("refresh_token");
-      c.delete("access_token");
-      c.delete("is_logged_in");
+      removeUselessCookies();
 
       return Response.json(
         { data: null, error: "Unauthorized", code: 401 },
@@ -75,9 +84,7 @@ export const withPrivateAPI =
       };
 
       if (refreshTokenExp <= new Date()) {
-        c.delete("refresh_token");
-        c.delete("access_token");
-        c.delete("is_logged_in");
+        removeUselessCookies();
 
         return Response.json(
           { data: null, error: "Unauthorized", code: 401 },

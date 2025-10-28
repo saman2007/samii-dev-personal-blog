@@ -66,10 +66,7 @@ const RootLayout = async ({
             }}
           >
             <AuthProvider>
-              <NavigationBar
-                params={extractedParams}
-                defaultTheme={selectedTheme}
-              />
+              <NavigationBar defaultTheme={selectedTheme} />
               {children}
               <Toaster />
               <Footer params={extractedParams} />

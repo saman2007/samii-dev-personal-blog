@@ -38,7 +38,7 @@ const SignInContainer = ({ params }: SignInContainerProps) => {
     toast.success(t("auth.signed_in_success"));
 
     setStore({
-      auth: { isLoggedIn: true, user: signInRes.data, isLoading: false },
+      auth: { isLoggedIn: true, user: signInRes.data.data, isLoading: false },
     });
 
     replace(`/${locale}/`);

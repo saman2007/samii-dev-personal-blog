@@ -15,6 +15,7 @@
   --color-semi-white: var(--color-semi-white);
   --color-black: var(--color-black);
   --color-red: var(--color-red);
+  --color-skeleton: var(--color-skeleton);
   --font-vazir: var(--font-vazir);
   --font-inter: var(--font-inter);
 }
@@ -30,6 +31,7 @@
   --color-border: #e7e7e7;
   --color-black: #000000;
   --color-red: #c90000;
+  --color-skeleton: oklch(86.686% 0.0001 271.152);
 }
 
 .dark {
@@ -38,6 +40,7 @@
   --color-text-secondary: #9CA3AF;
   --color-block: #111111;
   --color-border: #313131;
+  --color-skeleton: oklch(37.1% 0 0);
 }
 
 @layer base {
