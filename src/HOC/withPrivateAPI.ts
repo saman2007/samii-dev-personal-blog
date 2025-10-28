@@ -33,17 +33,26 @@ export const withPrivateAPI =
       c.delete("is_logged_in");
     };
 
-    const refreshToken = c.get("refresh_token")?.value;
-    const accessToken = c.get("access_token")?.value;
-
-    if (!refreshToken || !accessToken) {
+    const unauthorizedErr = () => {
       removeUselessCookies();
 
       return Response.json(
         { data: null, error: "Unauthorized", code: 401 },
         { status: 401 }
       );
-    }
+    };
+
+    const forbiddenErr = () => {
+      return Response.json(
+        { data: null, error: "Access Denied", code: 403 },
+        { status: 403 }
+      );
+    };
+
+    const refreshToken = c.get("refresh_token")?.value;
+    const accessToken = c.get("access_token")?.value;
+
+    if (!refreshToken || !accessToken) return unauthorizedErr();
 
     let refreshTokenPayload: JwtPayload;
     let accessTokenPayload: JwtPayload;
@@ -51,15 +60,10 @@ export const withPrivateAPI =
       refreshTokenPayload = validateRefreshToken(refreshToken);
       accessTokenPayload = validateAccessToken(accessToken);
     } catch {
-      removeUselessCookies();
-
-      return Response.json(
-        { data: null, error: "Unauthorized", code: 401 },
-        { status: 401 }
-      );
+      return unauthorizedErr();
     }
 
-    const [{ refreshTokenExp, isRevoked }] = await db
+    const userAuth = await db
       .select({
         isRevoked: usersTokenModel.isRevoked,
         refreshTokenExp: usersTokenModel.expiresAt,
@@ -67,14 +71,11 @@ export const withPrivateAPI =
       .from(usersTokenModel)
       .where(eq(usersTokenModel.hashedRefreshToken, hashToken(refreshToken)));
 
-    if (isRevoked) {
-      removeUselessCookies();
+    if (userAuth.length === 0) return unauthorizedErr();
 
-      return Response.json(
-        { data: null, error: "Unauthorized", code: 401 },
-        { status: 401 }
-      );
-    }
+    const [{ refreshTokenExp, isRevoked }] = userAuth;
+
+    if (isRevoked) return unauthorizedErr();
 
     if (accessTokenPayload.exp <= Date.now()) {
       const jwtPayload: JwtPayload = {
@@ -83,14 +84,7 @@ export const withPrivateAPI =
         exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_AGE_SECONDS,
       };
 
-      if (refreshTokenExp <= new Date()) {
-        removeUselessCookies();
-
-        return Response.json(
-          { data: null, error: "Unauthorized", code: 401 },
-          { status: 401 }
-        );
-      }
+      if (refreshTokenExp <= new Date()) return unauthorizedErr();
 
       const newAccessToken = createAccessToken(jwtPayload);
 
@@ -114,10 +108,7 @@ export const withPrivateAPI =
       const [{ role }] = user!;
 
       if (role !== "ADMIN") {
-        return Response.json(
-          { data: null, error: "Access Denied", code: 403 },
-          { status: 403 }
-        );
+        return forbiddenErr();
       }
     }
 
