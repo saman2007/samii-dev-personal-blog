@@ -68,7 +68,7 @@ export const withPrivateAPI =
         refreshTokenExp: usersTokenModel.expiresAt,
       })
       .from(usersTokenModel)
-      .where(eq(usersTokenModel.id, refreshTokenPayload.jti));
+      .where(eq(usersTokenModel.jti, refreshTokenPayload.jti));
 
     if (userAuth.length === 0) return unauthorizedErr();
 

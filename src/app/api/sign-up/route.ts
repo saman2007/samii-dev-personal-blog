@@ -95,7 +95,7 @@ export const POST = withUnexpectedError(
     const ua = new UAParser(req.headers.get("User-Agent") ?? undefined);
 
     await db.insert(usersTokenModel).values({
-      id: authId,
+      jti: authId,
       userId: createdUser.id,
       hashedRefreshToken: hashToken(refreshToken),
       expiresAt: new Date(currentDate + REFRESH_TOKEN_AGE_SECONDS * 1000),
