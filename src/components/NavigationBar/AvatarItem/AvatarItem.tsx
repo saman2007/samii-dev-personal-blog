@@ -2,7 +2,11 @@
 
 import { signOutAPI } from "@/api/auth";
 import Link from "@/components/Link/Link";
-import { Avatar, AvatarImage } from "@/components/UI/Avatar/Avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/UI/Avatar/Avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,9 +28,14 @@ import { toast } from "sonner";
 export interface AvatarItemProps {
   isLoading?: boolean;
   avatarImg?: string | null;
+  fallbackWord?: string;
 }
 
-const AvatarItem = ({ isLoading = false, avatarImg }: AvatarItemProps) => {
+const AvatarItem = ({
+  isLoading = false,
+  avatarImg,
+  fallbackWord,
+}: AvatarItemProps) => {
   const setStore = useSetStore();
   const { execute: signOut, isLoading: isSigningOut } = useRequest(signOutAPI);
   const params = useParams<Params>();
@@ -55,6 +64,7 @@ const AvatarItem = ({ isLoading = false, avatarImg }: AvatarItemProps) => {
         <div className="cursor-pointer h-10 rounded-full bg-block flex group w-20 justify-between items-center">
           <Avatar>
             <AvatarImage src={avatarImg ?? undefined} />
+            <AvatarFallback>{fallbackWord}</AvatarFallback>
           </Avatar>
           <ChevronDown className="size-4 group-hover:scale-125 group-hover:text-green transition mr-1.5" />
         </div>

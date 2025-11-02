@@ -59,7 +59,11 @@ const NavigationBar = ({ defaultTheme }: NavigationBarProps) => {
           <SwitchLang />
           <div className="gap-x-1 hidden md:flex">
             {isLoading || isLoggedIn ? (
-              <AvatarItem isLoading={isLoading} avatarImg={user?.profileImg} />
+              <AvatarItem
+                isLoading={isLoading}
+                avatarImg={user?.profileImg}
+                fallbackWord={user?.username?.[0]}
+              />
             ) : (
               <>
                 <Button
