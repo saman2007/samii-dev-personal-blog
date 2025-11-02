@@ -12,5 +12,8 @@
   "email": "Email",
   "password": "Password",
   "repeat_password": "Repeat password",
-  "username": "Username"
+  "username": "Username",
+  "profile": "Profile",
+  "settings": "Settings",
+  "sign_out": "Sign out"
 }

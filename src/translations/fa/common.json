@@ -12,5 +12,8 @@
   "email": "ایمیل",
   "password": "رمز عبور",
   "repeat_password": "تکرار رمز عبور",
-  "username": "نام کاربری"
+  "username": "نام کاربری",
+  "profile": "پروفایل",
+  "settings": "تنظیمات",
+  "sign_out": "خروج از حساب کاربری"
 }
