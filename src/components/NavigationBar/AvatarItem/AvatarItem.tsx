@@ -44,7 +44,7 @@ const AvatarItem = ({
 
   if (isLoading)
     return (
-      <Skeleton className="cursor-pointer h-10 rounded-full bg-block flex group w-20 justify-between items-center" />
+      <Skeleton className="cursor-pointer h-10 rounded-full bg-block flex group w-20 justify-between m-auto sm:m-0 items-center" />
     );
 
   const onSignOutHandler: MouseEventHandler<HTMLDivElement> = async (e) => {
@@ -61,7 +61,7 @@ const AvatarItem = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="cursor-pointer h-10 rounded-full bg-block flex group w-20 justify-between items-center">
+        <div className="cursor-pointer h-10 rounded-full bg-block flex group m-auto sm:m-0 w-20 justify-between items-center">
           <Avatar>
             <AvatarImage src={avatarImg ?? undefined} />
             <AvatarFallback>{fallbackWord}</AvatarFallback>
