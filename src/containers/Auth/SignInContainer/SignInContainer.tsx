@@ -27,7 +27,7 @@ const SignInContainer = ({ params }: SignInContainerProps) => {
   const methods = useForm({ resolver: yupResolver(signinSchema) });
   const { execute: signIn, isLoading } = useRequest(signInAPI);
   const { replace } = useRouter();
-  const { locale } = useParams<Params>();
+  const locale = params.locale;
   const setStore = useSetStore();
 
   const { t } = getTranslations(["common", "auth"], params);

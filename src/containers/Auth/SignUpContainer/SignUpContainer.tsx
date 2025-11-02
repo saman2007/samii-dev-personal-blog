@@ -12,6 +12,12 @@ import { Button } from "@/components/UI/Button/Button";
 import { SIGN_IN_ROUTE } from "@/data/staticRoutes";
 import { SignupData, signupSchema } from "@/lib/validationSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRequest } from "@/hooks/useRequest";
+import { signUpAPI } from "@/api/auth";
+import { useRouter } from "next/navigation";
+import { useSetStore } from "@/contexts/storeContext";
+import { toast } from "sonner";
+import { Spinner } from "@/components/UI/Spinner/Spinner";
 
 export interface SignUpContainerProps {
   params: Params;
@@ -19,11 +25,23 @@ export interface SignUpContainerProps {
 
 const SignUpContainer = ({ params }: SignUpContainerProps) => {
   const methods = useForm({ resolver: yupResolver(signupSchema) });
+  const { execute: signIn, isLoading } = useRequest(signUpAPI);
+  const { replace } = useRouter();
+  const locale = params.locale;
+  const setStore = useSetStore();
 
   const { t } = getTranslations(["common", "auth"], params);
 
-  const onSubmit = (data: SignupData) => {
-    console.log(data);
+  const onSubmit = async (data: SignupData) => {
+    const signUpRes = await signIn(data);
+
+    toast.success(t("auth.signed_up_success"));
+
+    setStore({
+      auth: { isLoggedIn: true, user: signUpRes.data.data, isLoading: false },
+    });
+
+    replace(`/${locale}/`);
   };
 
   return (
@@ -71,8 +89,9 @@ const SignUpContainer = ({ params }: SignUpContainerProps) => {
               variant="default"
               size="lg"
               className="text-base w-full mb-6"
+              disabled={isLoading}
             >
-              {t("common.sign_up")}
+              {isLoading ? <Spinner className="size-6" /> : t("common.sign_up")}
             </Button>
           </form>
         </FormProvider>
