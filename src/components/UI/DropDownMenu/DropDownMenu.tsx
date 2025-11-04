@@ -5,6 +5,8 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useParams } from "next/navigation";
+import { Params } from "@/types/types";
 
 function DropdownMenu({
   ...props
@@ -68,6 +70,8 @@ function DropdownMenuItem({
   inset?: boolean;
   variant?: "default" | "destructive";
 }) {
+  const { locale } = useParams<Params>();
+
   return (
     <DropdownMenuPrimitive.Item
       data-slot="dropdown-menu-item"
@@ -77,6 +81,7 @@ function DropdownMenuItem({
         "focus:bg-green focus:text-semi-white data-[variant=destructive]:text-green data-[variant=destructive]:focus:bg-green/10 dark:data-[variant=destructive]:focus:bg-green/20 data-[variant=destructive]:focus:text-green data-[variant=destructive]:*:[svg]:!text-destructive [&_svg:not([class*='text-'])]:text-text-secondary relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
+      dir="auto"
       {...props}
     />
   );
