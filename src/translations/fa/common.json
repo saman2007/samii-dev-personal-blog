@@ -3,9 +3,17 @@
   "articles": "مقالات",
   "newest_articles": "جدید ترین مقالات",
   "contact_me": "تماس با من",
-  "account": "حساب کاربری",
   "money_support": "حمایت مالی",
   "created_by_love": "ساخته شده با ❤️ و ☕️",
   "all_rights_reserved": "Samii Dev.  کلیه حقوق محفوظ است.",
-  "view_more": "دیدن بیشتر"
+  "view_more": "دیدن بیشتر",
+  "sign_in": "ورود",
+  "sign_up": "ثبت نام",
+  "email": "ایمیل",
+  "password": "رمز عبور",
+  "repeat_password": "تکرار رمز عبور",
+  "username": "نام کاربری",
+  "profile": "پروفایل",
+  "settings": "تنظیمات",
+  "sign_out": "خروج از حساب کاربری"
 }

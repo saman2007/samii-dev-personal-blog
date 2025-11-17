@@ -5,6 +5,10 @@ declare global {
       NODE_ENV: "development" | "production" | "test";
       DATABASE_URL: string;
       DATABASE_SUPPORT_SSL: string;
+      REFRESH_SECRET: string;
+      ACCESS_SECRET: string;
+      WEBSITE_URL?: string;
+      NEXT_PUBLIC_WEBSITE_URL?: string;
     }
   }
 }

@@ -1,0 +1,10 @@
+{
+  "required": "*Required",
+  "wrong_email": "Please enter a valid email.",
+  "lowercase_char_in_pass": "Password must contain at least a lower case english character.",
+  "number_in_pass": "Password must contain at least a digit.",
+  "username_first_char_error": "Username must start with an english character.",
+  "username_invalid_chars": "Username must contain only english characters, dot and underline.",
+  "username_length_error": "Username's length must be between 6 to 20 characters.",
+  "repeat_pass": "Repeat password must match the password you entered."
+}

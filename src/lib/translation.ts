@@ -14,10 +14,22 @@ export const getTranslations = (
   });
 
   //`translateKey` must be in this format: `<translation_file>.<key_in_translation_file>`
-  const t = (translateKey: string): string => {
+  const t = (
+    translateKey: string,
+    translateData?: Record<string, number | string>
+  ): string => {
     const [file, key] = translateKey.split(".") as [string, string];
 
-    return specifiedLocaleFiles[file][key] || translateKey;
+    let translatedLocaleKey = specifiedLocaleFiles[file][key] || key;
+
+    if (translateData && Object.keys(translateData).length !== 0) {
+      translatedLocaleKey = translatedLocaleKey.replaceAll(
+        /\{(\w+)\}/,
+        (_, dataKey) => translateData[dataKey].toString()
+      );
+    }
+
+    return translatedLocaleKey;
   };
 
   return { t };

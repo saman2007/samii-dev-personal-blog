@@ -1,22 +1,45 @@
 import { LocalesType } from "@/data/locales";
+import { usersModel } from "@/db/models/UsersModel";
+import { InferSelectModel } from "drizzle-orm";
+import { NextRequest } from "next/server";
 
-export interface Translation {
-  [key: string]: string;
-}
+export type Translation = Record<string, string>;
 
-export interface Translations {
-  [key: string]: Translation;
-}
+export type Translations = Record<string, Translation>;
 
 export interface Params {
   locale: LocalesType[number];
   [key: string]: string | undefined;
 }
 
-export type LocalesTranslations = {
-  [key in LocalesType[number]]: Translations;
-};
+export type LocalesTranslations = Record<LocalesType[number], Translations>;
 
 export type Themes = ["light", "dark"];
 
 export type DateArg = Date | string | number;
+
+export interface YupErrorMessage {
+  key: string;
+  data: Record<string, number | string> | undefined;
+}
+
+export type UserRoles = "ADMIN" | "USER";
+
+export type AnyRouteContext = { params: Promise<Record<string, string>> };
+
+export type ApiRouteFunction<T extends object | undefined = undefined> = (
+  request: NextRequest,
+  ctx: AnyRouteContext,
+  data: T
+) => Promise<Response>;
+
+export type UserPrivateInfo = Omit<
+  InferSelectModel<typeof usersModel>,
+  "password"
+>;
+
+export interface APIResponse<T> {
+  data: T;
+  error: string;
+  code: number;
+}

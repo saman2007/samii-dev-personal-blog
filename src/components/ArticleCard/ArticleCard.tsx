@@ -1,6 +1,6 @@
 import Link from "@/components/Link/Link";
 import { Calendar } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/UI/Badge/badge";
 import Image from "next/image";
 import { LocalesType } from "@/data/locales";
 import { getFullDate } from "@/lib/time";

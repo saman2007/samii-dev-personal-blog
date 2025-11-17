@@ -1,0 +1,118 @@
+import { AnyRouteContext, ApiRouteFunction } from "@/types/types";
+import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
+import {
+  ACCESS_TOKEN_AGE_SECONDS,
+  createAccessToken,
+  JwtPayload,
+  validateAccessToken,
+  validateRefreshToken,
+} from "@/lib/jwt";
+import { db } from "@/db/db";
+import { usersModel } from "@/db/models/UsersModel";
+import { eq, InferSelectModel } from "drizzle-orm";
+import { usersTokenModel } from "@/db/models/UserTokens";
+
+export const withPrivateAPI =
+  <T extends object>(
+    apiRoute: ApiRouteFunction<T>,
+    adminMode = false,
+    withUser = false
+  ) =>
+  async (
+    req: NextRequest,
+    ctx: AnyRouteContext,
+    data: object = {}
+  ): Promise<Response> => {
+    const c = await cookies();
+
+    const removeUselessCookies = () => {
+      c.delete("refresh_token");
+      c.delete("access_token");
+      c.delete("is_logged_in");
+    };
+
+    const unauthorizedErr = () => {
+      removeUselessCookies();
+
+      return Response.json(
+        { data: null, error: "Unauthorized", code: 401 },
+        { status: 401 }
+      );
+    };
+
+    const forbiddenErr = () => {
+      return Response.json(
+        { data: null, error: "Access Denied", code: 403 },
+        { status: 403 }
+      );
+    };
+
+    const refreshToken = c.get("refresh_token")?.value;
+    const accessToken = c.get("access_token")?.value;
+
+    if (!refreshToken || !accessToken) return unauthorizedErr();
+
+    let refreshTokenPayload: JwtPayload;
+    let accessTokenPayload: JwtPayload;
+    try {
+      refreshTokenPayload = validateRefreshToken(refreshToken);
+      accessTokenPayload = validateAccessToken(accessToken);
+    } catch {
+      return unauthorizedErr();
+    }
+
+    const userAuth = await db
+      .select({
+        isRevoked: usersTokenModel.isRevoked,
+        refreshTokenExp: usersTokenModel.expiresAt,
+      })
+      .from(usersTokenModel)
+      .where(eq(usersTokenModel.jti, refreshTokenPayload.jti));
+
+    if (userAuth.length === 0) return unauthorizedErr();
+
+    const [{ refreshTokenExp, isRevoked }] = userAuth;
+
+    if (isRevoked) return unauthorizedErr();
+
+    if (accessTokenPayload.exp <= Date.now()) {
+      const jwtPayload: JwtPayload = {
+        sub: accessTokenPayload.sub,
+        jti: crypto.randomUUID(),
+        exp: Math.floor(Date.now() / 1000) + ACCESS_TOKEN_AGE_SECONDS,
+      };
+
+      if (refreshTokenExp <= new Date()) return unauthorizedErr();
+
+      const newAccessToken = createAccessToken(jwtPayload);
+
+      c.set("access_token", newAccessToken, {
+        maxAge: ACCESS_TOKEN_AGE_SECONDS,
+        httpOnly: true,
+      });
+    }
+
+    let user: InferSelectModel<typeof usersModel>[];
+
+    if (adminMode || withUser) {
+      user = await db
+        .select()
+        .from(usersModel)
+        .where(eq(usersModel.id, refreshTokenPayload.sub))
+        .limit(1);
+    }
+
+    if (adminMode) {
+      const [{ role }] = user!;
+
+      if (role !== "ADMIN") {
+        return forbiddenErr();
+      }
+    }
+
+    return apiRoute(req, ctx, {
+      ...data,
+      user: withUser ? user![0] : null,
+    } as T);
+  };
