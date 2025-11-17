@@ -1,7 +1,7 @@
 import { getPreferredLocale } from "@/lib/utils";
 import { NextResponse, NextRequest } from "next/server";
 
-const notPrivateRoutes = [
+const notPrivateRoutes: RegExp[]  = [
   /^(?:\/(?:en|fa))?\/sign-in$/,
   /^(?:\/(?:en|fa))?\/sign-up$/,
 ];
